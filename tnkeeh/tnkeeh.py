@@ -56,7 +56,7 @@ def _remove_special_chars(text, execluded_chars = []):
                         '])').sub('', text)
 
 def _add_spaces_to_all_special_chars(text):
-    text = re.compile('([^\n\u0621-\u064A0-9])').sub(r' \1 ', text)
+    text = re.compile('(['+('').join(_get_all_special_chars())+'])').sub(r' \1 ', text)
     return text
 
 def save_list(list, file_name):
@@ -138,15 +138,15 @@ def read_data(data_path = 'data'):
     files = os.listdir(data_path)
 
     if 'train.txt' in files:
-        train_data = open(f'data/train.txt')
-        test_data  = open(f'data/test.txt')
+        train_data = open(f'data/train.txt').read()
+        test_data  = open(f'data/test.txt').read()
         return train_data, test_data
     else:
         print('Read data ', files)
-        train_data = open(f'data/train_data.txt')
-        train_lbls = open(f'data/train_lbls.txt')
+        train_data = open(f'data/train_data.txt').read().splitlines()
+        train_lbls = open(f'data/train_lbls.txt').read().splitlines()
 
-        test_data = open(f'data/test_data.txt')
-        test_lbls = open(f'data/test_lbls.txt')
+        test_data = open(f'data/test_data.txt').read().splitlines()
+        test_lbls = open(f'data/test_lbls.txt').read().splitlines()
 
         return train_data, test_data, train_lbls, test_lbls 
