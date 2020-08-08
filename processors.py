@@ -73,7 +73,7 @@ def _farasa_segment(text):
 
     return segmenter.segment(text)
 
-def clean(file_path, save_path, segment = False, remove_special_chars = False, 
+def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = []):
 
