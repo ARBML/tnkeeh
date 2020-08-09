@@ -14,7 +14,11 @@ def _remove_diacritics(text):
 
 # normalize data
 def _normalize_data(text):
-    norm_dict = pickle.load(open('norm_dict.pl', "rb"))
+    rel_path = os.path.dirname(__file__)
+    norm_dict_path = os.path.join(
+        rel_path, "dictionaries/norm_dict.pl"
+    )
+    norm_dict = pickle.load(open(norm_dict_path, "rb"))
     # use a mapping dictionary 
     regex = re.compile("|".join(map(re.escape, norm_dict.keys())))
     text  = regex.sub(lambda match: norm_dict[match.group(0)], text)
