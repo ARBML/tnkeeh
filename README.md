@@ -25,6 +25,7 @@ Arguments
 * `remove_special_chars` removes all sepcial chars. 
 * `remove_english` removes english alphabets and digits. 
 * `normalize` match digits that have the same writing but different encodings. 
+* `remove tatweel` tatweel character `ـ` is used a lot in arabic writing.  
 
 ### Data Splitting 
 Splits raw data into training and testing using the `split_ratio`
