@@ -79,7 +79,7 @@ def _farasa_segment(text):
 
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = []):
+        execluded_chars = [], remove_tatweel = True):
 
     assert file_path
     assert save_path
@@ -101,6 +101,9 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     if remove_diacritics:
         print('Remove diacritics')
         text = _remove_diacritics(text)
+    if remove_tatweel:
+        print('Remove Tatweel')
+        text = re.sub('ـ', '', text)
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
