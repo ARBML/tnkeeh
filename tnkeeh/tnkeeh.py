@@ -141,14 +141,36 @@ def split_classification_data(data_path, lbls_path, split_ratio = 0.8):
     open('data/test_data.txt', 'w').write(test_data)
     open('data/test_lbls.txt', 'w').write(test_lbls)
 
-def read_data(data_path = 'data'):
+def split_parallel_data(input_path, target_path, split_ratio = 0.8):
+    
+    inp_data = open(input_path, 'r').read().splitlines()
+    tar_data  = open(target_path, 'r').read().splitlines()
+    
+    assert len(inp_data) == len(tar_data)
+
+    print('Split data')
+    train_inp_data = ('\n').join(inp_data[:int(split_ratio*len(inp_data))])
+    train_tar_data = ('\n').join(tar_data[:int(split_ratio*len(inp_data))])
+
+    test_inp_data = ('\n').join(inp_data[int(split_ratio*len(inp_data)):])
+    test_tar_data = ('\n').join(tar_data[int(split_ratio*len(inp_data)):])
+
+    print('Save to data')
+    Path("data").mkdir(parents=True, exist_ok=True)
+    open('data/train_inp_data.txt', 'w').write(train_inp_data)
+    open('data/train_tar_data.txt', 'w').write(train_tar_data)
+
+    open('data/test_inp_data.txt', 'w').write(test_inp_data)
+    open('data/test_tar_data.txt', 'w').write(test_tar_data)
+
+def read_data(data_path = 'data', mode = 0):
     files = os.listdir(data_path)
 
-    if 'train.txt' in files:
+    if mode == 0:
         train_data = open(f'data/train.txt').read()
         test_data  = open(f'data/test.txt').read()
         return train_data, test_data
-    else:
+    elif mode == 1:
         print('Read data ', files)
         train_data = open(f'data/train_data.txt').read().splitlines()
         train_lbls = open(f'data/train_lbls.txt').read().splitlines()
@@ -157,3 +179,12 @@ def read_data(data_path = 'data'):
         test_lbls = open(f'data/test_lbls.txt').read().splitlines()
 
         return train_data, test_data, train_lbls, test_lbls 
+    elif mode == 2:
+        print('Read data ', files)
+        train_inp_data = open(f'data/train_inp_data.txt').read().splitlines()
+        train_tar_data = open(f'data/train_tar_data.txt').read().splitlines()
+
+        test_inp_data = open(f'data/test_inp_data.txt').read().splitlines()
+        test_tar_data = open(f'data/test_tar_data.txt').read().splitlines()
+
+        return train_inp_data, train_tar_data, test_inp_data, test_tar_data 
