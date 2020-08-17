@@ -4,6 +4,8 @@
 
 **tnkeeh** (تنقيح) is an Arabic preprocessing library for python. It was designed using `re` for creating quick replacement expressions for several examples.
 
+## Installation 
+``` pip install tnkeeh ```
 ## Features
 * Quick cleaning
 * Segmentation
