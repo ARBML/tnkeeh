@@ -41,13 +41,27 @@ import tnkeeh as tn
 tn.split_classification_data(data_path, lbls_path, split_ratio = 0.8)
 ```
 
+Splits input and target data with ration `split_ratio`. Commonly used for translation 
+
+```python
+tn.split_parallel_data('ar_data.txt','en_data.txt')
+
+```
+
 ### Data Reading
 Read split data, depending if it was raw or classification
 
 ```python
 import tnkeeh as tn
-train_data, test_data, train_lbls, test_lbls = tn.read_data()
+train_data, test_data = tn.read_data(mode = 0)
 ```
+
+Arguments
+
+* `mode = 0` read raw data. 
+* `mode = 1` read labeled data. 
+* `mode = 2` read parallel data. 
+
 ## Contribution 
 This is an open source project where we encourage contributions from the community. 
 
