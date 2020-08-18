@@ -1,5 +1,5 @@
  <p align="center"> 
- <img src = "logo.png" width = "200px"/>
+ <img src = "https://raw.githubusercontent.com/ARBML/tnkeeh/master/logo.png" width = "200px"/>
  </p>
 
 **tnkeeh** (تنقيح) is an Arabic preprocessing library for python. It was designed using `re` for creating quick replacement expressions for several examples.
