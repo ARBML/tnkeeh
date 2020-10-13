@@ -30,3 +30,17 @@ if text == expected:
     print('success')
 else:
     print('failed')
+
+text = tnkeeh._remove_diacritics("أيضاً")
+expected = "أيضا"
+if text == expected:
+    print('success')
+else:
+    print('failed')
+
+text = tnkeeh._remove_html_elements('<doc id="7" url="https://ar.wikipedia.org/wiki?curid=7" title="ماء">')
+expected = ""
+if text == expected:
+    print('success')
+else:
+    print('failed')
