@@ -75,7 +75,7 @@ def save_list(list, file_name):
     open(file_name, 'w').write(('\n').join(list))
 
 def _remove_html_elements(text):
-    soup = BeautifulSoup(text)
+    soup = BeautifulSoup(text, 'lxml')
     return soup.get_text()
 
 def _farasa_segment(text):
@@ -97,8 +97,7 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     assert save_path
 
     text = open(file_path , 'r').read()
-    text = _add_spaces_to_all_special_chars(text)
-
+    
     if remove_html_elements:
         print('Remove HTML elements')
         text = _remove_html_elements(text)
@@ -121,6 +120,7 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
         print('Remove tatweel')
         text = re.sub('ـ', '', text)
 
+    text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
     print(f'Saving to {save_path}')
     open(save_path, 'w').write(text)
