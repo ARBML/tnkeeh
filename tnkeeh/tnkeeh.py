@@ -57,11 +57,11 @@ def _remove_extra_spaces(text):
     return text
 
 def _remove_special_chars(text, execluded_chars = []):
-    regex_special_chars='\^+*[]-'
+    regex_special_chars='\\^+*[]-'
     ignored_chars = ''
     for char in execluded_chars:
         if char in regex_special_chars:
-            ignored_chars+=f'\{char}'
+            ignored_chars+=f'\\'+char
         else:
             ignored_chars+=char
     return re.compile('([^\n\u0621-\u064A0-9a-zA-Z '+('').join(execluded_chars)+
@@ -75,7 +75,7 @@ def save_list(list, file_name):
     open(file_name, 'w').write(('\n').join(list))
 
 def _remove_html_elements(text):
-    soup = BeautifulSoup(text, '"html.parser"')
+    soup = BeautifulSoup(text, "html.parser")
     return soup.text
 
 def _farasa_segment(text):
