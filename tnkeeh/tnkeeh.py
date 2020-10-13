@@ -89,6 +89,9 @@ def _farasa_segment(text):
 
     return segmenter.segment(text)
 
+def _remove_empty_lines(text):
+    lines = text.split('\n')
+    return ('\n').join([line for line in lines if len(line) > 1])
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False):
@@ -122,6 +125,8 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
+    text = _remove_empty_lines(text)
+    
     print(f'Saving to {save_path}')
     open(save_path, 'w').write(text)
 
