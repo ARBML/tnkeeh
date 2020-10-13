@@ -75,8 +75,8 @@ def save_list(list, file_name):
     open(file_name, 'w').write(('\n').join(list))
 
 def _remove_html_elements(text):
-    soup = BeautifulSoup(text, 'lxml')
-    return soup.get_text()
+    soup = BeautifulSoup(text, '"html.parser"')
+    return soup.text
 
 def _farasa_segment(text):
     # suppress farasa stdout
