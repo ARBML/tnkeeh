@@ -23,3 +23,10 @@ if text == expected:
     print('success')
 else:
     print('failed')
+
+text = tnkeeh._remove_twitter_meta("@arthurlacoste check this link : https://lit.ly/hugeLink ! so #nsfw")
+expected = "  check this link :   ! so  "
+if text == expected:
+    print('success')
+else:
+    print('failed')

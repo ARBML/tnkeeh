@@ -92,9 +92,21 @@ def _farasa_segment(text):
 def _remove_empty_lines(text):
     lines = text.split('\n')
     return ('\n').join([line for line in lines if len(line) > 1])
+
+#https://stackoverflow.com/a/11332580
+def _remove_links(text):
+    text = re.sub(r'http\S+',' ', text, flags=re.MULTILINE)
+    return text
+
+def _remove_twitter_meta(text):
+    text = re.sub("(@[A-Za-z0-9]+)"," ",text)
+    text = re.sub("(#[A-Za-z0-9]+)"," ",text)
+    text = _remove_links(text)
+    return text
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = False, remove_html_elements = False):
+        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        remove_links = False, remove_twitter_meta = False):
 
     assert file_path
     assert save_path
@@ -122,11 +134,17 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     if remove_tatweel:
         print('Remove tatweel')
         text = re.sub('ـ', '', text)
+    if remove_links:
+        print('Remove links')
+        text = _remove_links(text)
+    if remove_twitter_meta:
+        print('Remove twitter meta')
+        text = _remove_twitter_meta(text)
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
     text = _remove_empty_lines(text)
-    
+
     print(f'Saving to {save_path}')
     open(save_path, 'w').write(text)
 
