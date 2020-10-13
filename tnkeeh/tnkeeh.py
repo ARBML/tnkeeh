@@ -6,6 +6,7 @@ import pickle
 import warnings
 from pathlib import Path
 from farasa.segmenter import FarasaSegmenter
+from bs4 import BeautifulSoup
 
 # remove diacritics
 def _remove_diacritics(text):
@@ -56,6 +57,13 @@ def _remove_extra_spaces(text):
     return text
 
 def _remove_special_chars(text, execluded_chars = []):
+    regex_special_chars='\^+*[]-'
+    ignored_chars = ''
+    for char in execluded_chars:
+        if char in regex_special_chars:
+            ignored_chars+=f'\{char}'
+        else:
+            ignored_chars+=char
     return re.compile('([^\n\u0621-\u064A0-9a-zA-Z '+('').join(execluded_chars)+
                         '])').sub(' ', text)
 
@@ -65,6 +73,10 @@ def _add_spaces_to_all_special_chars(text):
 
 def save_list(list, file_name):
     open(file_name, 'w').write(('\n').join(list))
+
+def _remove_html_elements(text):
+    soup = BeautifulSoup(text)
+    return soup.get_text()
 
 def _farasa_segment(text):
     # suppress farasa stdout
@@ -79,7 +91,7 @@ def _farasa_segment(text):
 
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = True):
+        execluded_chars = [], remove_tatweel = False, remove_html_elements = False):
 
     assert file_path
     assert save_path
@@ -87,23 +99,26 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     text = open(file_path , 'r').read()
     text = _add_spaces_to_all_special_chars(text)
 
+    if remove_html_elements:
+        print('Remove HTML elements')
+        text = _remove_html_elements(text)
     if segment:
-        print('Segmenting data')
+        print('Segment data')
         text = _farasa_segment(text)
     if remove_english:
-        print('Remove English Chars')
+        print('Remove English chars')
         text = _remove_english_chars(text)
     if normalize:
         print('Normalize data')
         text = _normalize_data(text)
     if remove_special_chars:
-        print('Remove special characters')
+        print('Remove special chars')
         text = _remove_special_chars(text, execluded_chars)
     if remove_diacritics:
         print('Remove diacritics')
         text = _remove_diacritics(text)
     if remove_tatweel:
-        print('Remove Tatweel')
+        print('Remove tatweel')
         text = re.sub('ـ', '', text)
 
     text = _remove_extra_spaces(text)
