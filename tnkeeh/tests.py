@@ -8,8 +8,8 @@ if text == expected:
 else:
     print('failed')
 
-text = tnkeeh._remove_special_chars('3 + 3', execluded_chars = ['+'])
-expected = '3 + 3'
+text = tnkeeh._remove_special_chars('3 + 3 and 3 - 3', execluded_chars = ['+' , '-', '*'])
+expected = '3 + 3 and 3 - 3'
 
 if text == expected:
     print('success')
