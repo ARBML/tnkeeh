@@ -56,11 +56,11 @@ def _remove_extra_spaces(text):
     return text
 
 def _remove_special_chars(text, execluded_chars = []):
-    return re.compile('([^\n\u0621-\u064A0-9 '+('').join(execluded_chars)+
-                        '])').sub('', text)
+    return re.compile('([^\n\u0621-\u064A0-9a-zA-Z '+('').join(execluded_chars)+
+                        '])').sub(' ', text)
 
 def _add_spaces_to_all_special_chars(text):
-    text = re.compile('(['+('').join(_get_all_special_chars())+'])').sub(r' \1 ', text)
+    text = re.compile('([^\n\u0621-\u064A0-9a-zA-Z ])').sub(r' \1 ', text)
     return text
 
 def save_list(list, file_name):
@@ -85,6 +85,7 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     assert save_path
 
     text = open(file_path , 'r').read()
+    text = _add_spaces_to_all_special_chars(text)
 
     if segment:
         print('Segmenting data')
@@ -105,7 +106,6 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
         print('Remove Tatweel')
         text = re.sub('ـ', '', text)
 
-    text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
     print(f'Saving to {save_path}')
     open(save_path, 'w').write(text)
