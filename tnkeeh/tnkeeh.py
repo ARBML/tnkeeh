@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 
 # remove diacritics
 def _remove_diacritics(text):
-    text = re.sub(r"[ًٌٍَََُِّْ]", "", text)
+    text = re.sub(r"[ًٌٍَُِّْ]", "", text)
     return text
 
 # normalize data
@@ -126,12 +126,12 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     if normalize:
         print('Normalize data')
         text = _normalize_data(text)
-    if remove_special_chars:
-        print('Remove special chars')
-        text = _remove_special_chars(text, execluded_chars)
     if remove_diacritics:
         print('Remove diacritics')
         text = _remove_diacritics(text)
+    if remove_special_chars:
+        print('Remove special chars')
+        text = _remove_special_chars(text, execluded_chars)
     if remove_tatweel:
         print('Remove tatweel')
         text = re.sub('ـ', '', text)

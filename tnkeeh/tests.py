@@ -31,8 +31,9 @@ if text == expected:
 else:
     print('failed')
 
-text = tnkeeh._remove_diacritics("أيضاً")
-expected = "أيضا"
+text = tnkeeh._remove_diacritics("وَأفْجَـعُ مَن فَقَدْنَا مَن وَّجَدْنَا قُـبَيْلَ الفَقْدِ مَفْقُـودَ الْمِثالِ يُدفِّـنُ بَعْضُنَا")
+expected = "وأفجـع من فقدنا من وجدنا قـبيل الفقد مفقـود المثال يدفـن بعضنا"
+print(tnkeeh._remove_diacritics("وَقِيلَ يَا أَرْضُ ابْلَعِي مَاءَكِ"))
 if text == expected:
     print('success')
 else:
