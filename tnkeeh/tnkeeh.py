@@ -105,7 +105,7 @@ def _remove_twitter_meta(text):
     text = _remove_links(text)
     return text
 
-def _remove_long_words(text, threshold = 10):
+def _remove_long_words(text, threshold = 15):
     return (' ').join(word for word in text.split(' ') if len(word) < threshold)
 
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
