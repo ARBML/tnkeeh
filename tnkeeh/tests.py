@@ -52,3 +52,10 @@ if text == expected:
     print('success')
 else:
     print('failed')
+
+text = tnkeeh._remove_extra_spaces('اهلا     كيف حالك')
+expected = "اهلا كيف حالك"
+if text == expected:
+    print('success')
+else:
+    print('failed')

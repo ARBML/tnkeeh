@@ -116,53 +116,69 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False):
+        remove_repeated_chars = False,  by_chunk = False, chunk_size = 100000):
 
     assert file_path
     assert save_path
 
-    text = open(file_path , 'r').read()
-    
-    if remove_repeated_chars:
-        print('Remove repeated words')
-        text = _remove_repeated_chars(text)
-    if remove_html_elements:
-        print('Remove HTML elements')
-        text = _remove_html_elements(text)
-    if segment:
-        print('Segment data')
-        text = _farasa_segment(text)
-    if remove_english:
-        print('Remove English chars')
-        text = _remove_english_chars(text)
-    if normalize:
-        print('Normalize data')
-        text = _normalize_data(text)
-    if remove_diacritics:
-        print('Remove diacritics')
-        text = _remove_diacritics(text)
-    if remove_special_chars:
-        print('Remove special chars')
-        text = _remove_special_chars(text, execluded_chars)
-    if remove_tatweel:
-        print('Remove tatweel')
-        text = re.sub('ـ', '', text)
-    if remove_links:
-        print('Remove links')
-        text = _remove_links(text)
-    if remove_twitter_meta:
-        print('Remove twitter meta')
-        text = _remove_twitter_meta(text)
-    if remove_long_words:
-        print('Remove long words')
-        text = _remove_long_words(text)
 
-    text = _add_spaces_to_all_special_chars(text)
-    text = _remove_extra_spaces(text)
-    text = _remove_empty_lines(text)
+    with open(file_path, 'r') as f:
+        i = 0 
+        while True:
+            if by_chunk:
+                text = ('').join(f.readlines(chunk_size))
+            else:
+                text = f.read()
+            
+            if len(text) == 0:
+                break
 
-    print(f'Saving to {save_path}')
-    open(save_path, 'w').write(text)
+            if remove_repeated_chars:
+                print('Remove repeated words')
+                text = _remove_repeated_chars(text)
+            if remove_html_elements:
+                print('Remove HTML elements')
+                text = _remove_html_elements(text)
+            if segment:
+                print('Segment data')
+                text = _farasa_segment(text)
+            if remove_english:
+                print('Remove English chars')
+                text = _remove_english_chars(text)
+            if normalize:
+                print('Normalize data')
+                text = _normalize_data(text)
+            if remove_diacritics:
+                print('Remove diacritics')
+                text = _remove_diacritics(text)
+            if remove_special_chars:
+                print('Remove special chars')
+                text = _remove_special_chars(text, execluded_chars)
+            if remove_tatweel:
+                print('Remove tatweel')
+                text = re.sub('ـ', '', text)
+            if remove_links:
+                print('Remove links')
+                text = _remove_links(text)
+            if remove_twitter_meta:
+                print('Remove twitter meta')
+                text = _remove_twitter_meta(text)
+            if remove_long_words:
+                print('Remove long words')
+                text = _remove_long_words(text)
+
+            text = _add_spaces_to_all_special_chars(text)
+            text = _remove_extra_spaces(text)
+            text = _remove_empty_lines(text)
+
+            if by_chunk:
+                path = save_path.replace('.txt', f'_{i}.txt')
+                print(f'Saving chunk to {path}')
+                open(path, 'w').write(text)
+            else:
+                print(f'Saving to {save_path}')
+                open(save_path, 'w').write(text)
+            i+= 1
 
 def split_raw_data(data_path, split_ratio = 0.8):
     data = open(data_path, 'r').read()
