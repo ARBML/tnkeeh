@@ -108,16 +108,24 @@ def _remove_twitter_meta(text):
 def _remove_long_words(text, threshold = 15):
     return (' ').join(word for word in text.split(' ') if len(word) < threshold)
 
+#https://stackoverflow.com/a/10072826
+def _remove_repeated_chars(text):
+    return re.sub(r'(.)\1+', r'\1\1', text) 
+
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
-        remove_links = False, remove_twitter_meta = False, remove_long_words = False):
+        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
+        remove_repeated_chars = False):
 
     assert file_path
     assert save_path
 
     text = open(file_path , 'r').read()
     
+    if remove_repeated_chars:
+        print('Remove repeated words')
+        text = _remove_repeated_chars(text)
     if remove_html_elements:
         print('Remove HTML elements')
         text = _remove_html_elements(text)

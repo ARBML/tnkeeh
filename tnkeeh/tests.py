@@ -33,7 +33,7 @@ else:
 
 text = tnkeeh._remove_diacritics("وَأفْجَـعُ مَن فَقَدْنَا مَن وَّجَدْنَا قُـبَيْلَ الفَقْدِ مَفْقُـودَ الْمِثالِ يُدفِّـنُ بَعْضُنَا")
 expected = "وأفجـع من فقدنا من وجدنا قـبيل الفقد مفقـود المثال يدفـن بعضنا"
-print(tnkeeh._remove_diacritics("وَقِيلَ يَا أَرْضُ ابْلَعِي مَاءَكِ"))
+
 if text == expected:
     print('success')
 else:
@@ -41,6 +41,13 @@ else:
 
 text = tnkeeh._remove_html_elements('<doc id="7" url="https://ar.wikipedia.org/wiki?curid=7" title="ماء">')
 expected = ""
+if text == expected:
+    print('success')
+else:
+    print('failed')
+
+text = tnkeeh._remove_repeated_chars('هههههههه')
+expected = "هه"
 if text == expected:
     print('success')
 else:
