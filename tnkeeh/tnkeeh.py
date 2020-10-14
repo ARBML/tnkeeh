@@ -104,10 +104,14 @@ def _remove_twitter_meta(text):
     text = re.sub("(#[A-Za-z0-9]+)"," ",text)
     text = _remove_links(text)
     return text
+
+def _remove_long_words(text, threshold = 10):
+    return (' ').join(word for word in text.split(' ') if len(word) < threshold)
+
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
-        remove_links = False, remove_twitter_meta = False):
+        remove_links = False, remove_twitter_meta = False, remove_long_words = False):
 
     assert file_path
     assert save_path
@@ -141,6 +145,9 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     if remove_twitter_meta:
         print('Remove twitter meta')
         text = _remove_twitter_meta(text)
+    if remove_long_words:
+        print('Remove long words')
+        text = _remove_long_words(text)
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
