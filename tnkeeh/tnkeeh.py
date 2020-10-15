@@ -6,7 +6,6 @@ import pickle
 import warnings
 from pathlib import Path
 from farasa.segmenter import FarasaSegmenter
-from bs4 import BeautifulSoup
 
 # remove diacritics
 def _remove_diacritics(text):
@@ -185,7 +184,7 @@ def split_raw_data(data_path, split_ratio = 0.8):
 
     train_data = data[:int(split_ratio*len(data))]
     test_data  = data[int(split_ratio*len(data)):]
-    
+
     print('Save to data')
     Path("data").mkdir(parents=True, exist_ok=True)
     open('data/train.txt', 'w').write(train_data)
