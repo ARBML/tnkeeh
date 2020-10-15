@@ -133,7 +133,7 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
                 break
 
             if remove_repeated_chars:
-                print('Remove repeated words')
+                print('Remove repeated chars')
                 text = _remove_repeated_chars(text)
             if remove_html_elements:
                 print('Remove HTML elements')
