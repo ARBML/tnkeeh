@@ -27,7 +27,13 @@ Arguments
 * `remove_special_chars` removes all sepcial chars. 
 * `remove_english` removes english alphabets and digits. 
 * `normalize` match digits that have the same writing but different encodings. 
-* `remove tatweel` tatweel character `ـ` is used a lot in arabic writing.  
+* `remove_tatweel` tatweel character `ـ` is used a lot in arabic writing.
+* `remove_repeated_chars` remove characters that appear three times in sequence.  
+* `remove_html_elements` remove html elements in the form <element> with their attirbutes.  
+* `remove_links` remove links.   
+* `remove_twitter_meta` remove twitter mentions, links and hashtags.
+* `remove_long_words` remove words longer than 15 chars. 
+* `by_chunk` read files by chunks with size `chunk_size`. 
 
 ### Data Splitting 
 Splits raw data into training and testing using the `split_ratio`
