@@ -78,15 +78,7 @@ def _remove_html_elements(text):
     text = re.sub(cleanr, '', text)
     return text
 
-def _farasa_segment(text):
-    # suppress farasa stdout
-    # WARNING: this is LINUX ONLY command!
-    old_stdout = sys.stdout
-    sys.stdout = open(os.devnull, "w")
-    segmenter = FarasaSegmenter(interactive=True)
-    # resume farasa stdout
-    sys.stdout = old_stdout
-
+def _farasa_segment(text, segmenter):
     return segmenter.segment(text)
 
 def _remove_empty_lines(text):
@@ -120,6 +112,14 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
     assert file_path
     assert save_path
 
+    if segment:
+        # suppress farasa stdout
+        # WARNING: this is LINUX ONLY command!
+        old_stdout = sys.stdout
+        sys.stdout = open(os.devnull, "w")
+        segmenter = FarasaSegmenter(interactive=True)
+        # resume farasa stdout
+        sys.stdout = old_stdout
 
     with open(file_path, 'r') as f:
         i = 0 
@@ -140,7 +140,7 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
                 text = _remove_html_elements(text)
             if segment:
                 print('Segment data')
-                text = _farasa_segment(text)
+                text = _farasa_segment(text, segmenter)
             if remove_english:
                 print('Remove English chars')
                 text = _remove_english_chars(text)
