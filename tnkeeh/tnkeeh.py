@@ -125,7 +125,6 @@ def _remove_long_words(text, threshold=15):
     return (" ").join(word for word in text.split(" ") if len(word) < threshold)
 
 
-<<<<<<< HEAD
 def _clean_list(list, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
@@ -201,11 +200,9 @@ def clean_data(file_path, save_path, segment = False, remove_special_chars = Fal
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
         remove_repeated_chars = False,  by_chunk = False, chunk_size = 100000):
-=======
 # https://stackoverflow.com/a/10072826
 def _remove_repeated_chars(text):
     return re.sub(r"(.)\1+", r"\1\1", text)
-
 
 def _normalize_dots(text):
     dots_letters = {
@@ -253,7 +250,6 @@ def clean_data(
     chunk_size=100000,
     normalize_dots=False,
 ):
->>>>>>> 4858795ee12a77af7fd9b8ee3f438c6bdcbdb38c
 
     assert file_path
     assert save_path
