@@ -3,6 +3,7 @@ import os
 import sys
 import math
 import pickle
+import pandas 
 import warnings
 from pathlib import Path
 from farasa.segmenter import FarasaSegmenter
@@ -102,6 +103,77 @@ def _remove_long_words(text, threshold = 15):
 #https://stackoverflow.com/a/10072826
 def _remove_repeated_chars(text):
     return re.sub(r'(.)\1+', r'\1\1', text) 
+
+
+def _clean_list(list, segment = False, remove_special_chars = False, 
+        remove_english = False, normalize = False, remove_diacritics = False,
+        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
+        remove_repeated_chars = False):
+
+    cleaned_list = []
+
+    for text in list:
+        if segment:
+            # suppress farasa stdout
+            # WARNING: this is LINUX ONLY command!
+            old_stdout = sys.stdout
+            sys.stdout = open(os.devnull, "w")
+            segmenter = FarasaSegmenter(interactive=True)
+            # resume farasa stdout
+            sys.stdout = old_stdout
+
+        if remove_repeated_chars:
+            print('Remove repeated chars')
+            text = _remove_repeated_chars(text)
+        if remove_html_elements:
+            print('Remove HTML elements')
+            text = _remove_html_elements(text)
+        if segment:
+            print('Segment data')
+            text = _farasa_segment(text, segmenter)
+        if remove_english:
+            print('Remove English chars')
+            text = _remove_english_chars(text)
+        if normalize:
+            print('Normalize data')
+            text = _normalize_data(text)
+        if remove_diacritics:
+            print('Remove diacritics')
+            text = _remove_diacritics(text)
+        if remove_special_chars:
+            print('Remove special chars')
+            text = _remove_special_chars(text, execluded_chars)
+        if remove_tatweel:
+            print('Remove tatweel')
+            text = re.sub('ـ', '', text)
+        if remove_links:
+            print('Remove links')
+            text = _remove_links(text)
+        if remove_twitter_meta:
+            print('Remove twitter meta')
+            text = _remove_twitter_meta(text)
+        if remove_long_words:
+            print('Remove long words')
+            text = _remove_long_words(text)
+
+        text = _add_spaces_to_all_special_chars(text)
+        text = _remove_extra_spaces(text)
+        cleaned_list.append(text)
+    return cleaned_list
+
+def clean_data_frame(df, column_name, segment = False, remove_special_chars = False, 
+        remove_english = False, normalize = False, remove_diacritics = False,
+        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
+        remove_repeated_chars = False):
+    
+    df[column_name] = list(_clean_list(df[column_name], segment, remove_special_chars, 
+        remove_english, normalize, remove_diacritics,
+        execluded_chars, remove_tatweel, remove_html_elements,
+        remove_links, remove_twitter_meta, remove_long_words,
+        remove_repeated_chars))
+    return df 
 
 def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
