@@ -9,12 +9,9 @@ from pathlib import Path
 from farasa.segmenter import FarasaSegmenter
 
 # remove diacritics
-
-
 def _remove_diacritics(text):
     text = re.sub(r"[ًٌٍَُِّْ]", "", text)
     return text
-
 
 # normalize data
 def _normalize_data(text):
@@ -124,61 +121,48 @@ def _remove_twitter_meta(text):
 def _remove_long_words(text, threshold=15):
     return (" ").join(word for word in text.split(" ") if len(word) < threshold)
 
+def _clean_text(text, **kwargs):
+    if kwargs['segment']:
+        # suppress farasa stdout
+        # WARNING: this is LINUX ONLY command!
+        old_stdout = sys.stdout
+        sys.stdout = open(os.devnull, "w")
+        segmenter = FarasaSegmenter(interactive=True)
+        # resume farasa stdout
+        sys.stdout = old_stdout
 
-def _clean_list(list, segment = False, remove_special_chars = False, 
-        remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
-        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False):
+    if kwargs['remove_repeated_chars']:
+        text = _remove_repeated_chars(text)
+    if kwargs['remove_html_elements']:
+        text = _remove_html_elements(text)
+    if kwargs['segment']:
+        text = _farasa_segment(text, segmenter)
+    if kwargs['remove_english']:
+        text = _remove_english_chars(text)
+    if kwargs['normalize']:
+        text = _normalize_data(text)
+    if kwargs['remove_diacritics']:
+        text = _remove_diacritics(text)
+    if kwargs['remove_special_chars']:
+        text = _remove_special_chars(text, kwargs['execluded_chars'])
+    if kwargs['remove_tatweel']:
+        text = re.sub('ـ', '', text)
+    if kwargs['remove_links']:
+        text = _remove_links(text)
+    if kwargs['remove_twitter_meta']:
+        text = _remove_twitter_meta(text)
+    if kwargs['remove_long_words']:
+        text = _remove_long_words(text)
 
+    text = _add_spaces_to_all_special_chars(text)
+    text = _remove_extra_spaces(text)
+    return text 
+
+def _clean_list(list, **kwargs):
     cleaned_list = []
 
     for text in list:
-        if segment:
-            # suppress farasa stdout
-            # WARNING: this is LINUX ONLY command!
-            old_stdout = sys.stdout
-            sys.stdout = open(os.devnull, "w")
-            segmenter = FarasaSegmenter(interactive=True)
-            # resume farasa stdout
-            sys.stdout = old_stdout
-
-        if remove_repeated_chars:
-            print('Remove repeated chars')
-            text = _remove_repeated_chars(text)
-        if remove_html_elements:
-            print('Remove HTML elements')
-            text = _remove_html_elements(text)
-        if segment:
-            print('Segment data')
-            text = _farasa_segment(text, segmenter)
-        if remove_english:
-            print('Remove English chars')
-            text = _remove_english_chars(text)
-        if normalize:
-            print('Normalize data')
-            text = _normalize_data(text)
-        if remove_diacritics:
-            print('Remove diacritics')
-            text = _remove_diacritics(text)
-        if remove_special_chars:
-            print('Remove special chars')
-            text = _remove_special_chars(text, execluded_chars)
-        if remove_tatweel:
-            print('Remove tatweel')
-            text = re.sub('ـ', '', text)
-        if remove_links:
-            print('Remove links')
-            text = _remove_links(text)
-        if remove_twitter_meta:
-            print('Remove twitter meta')
-            text = _remove_twitter_meta(text)
-        if remove_long_words:
-            print('Remove long words')
-            text = _remove_long_words(text)
-
-        text = _add_spaces_to_all_special_chars(text)
-        text = _remove_extra_spaces(text)
+        text = _clean_text(text, **kwargs)
         cleaned_list.append(text)
     return cleaned_list
 
@@ -187,19 +171,9 @@ def clean_data_frame(df, column_name, segment = False, remove_special_chars = Fa
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
         remove_repeated_chars = False):
-    
-    df[column_name] = list(_clean_list(df[column_name], segment, remove_special_chars, 
-        remove_english, normalize, remove_diacritics,
-        execluded_chars, remove_tatweel, remove_html_elements,
-        remove_links, remove_twitter_meta, remove_long_words,
-        remove_repeated_chars))
+    df[column_name] = list(_clean_list(df[column_name], **locals()))
     return df 
 
-def clean_data(file_path, save_path, segment = False, remove_special_chars = False, 
-        remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
-        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False,  by_chunk = False, chunk_size = 100000):
 # https://stackoverflow.com/a/10072826
 def _remove_repeated_chars(text):
     return re.sub(r"(.)\1+", r"\1\1", text)
