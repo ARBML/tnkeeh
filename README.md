@@ -35,6 +35,19 @@ Arguments
 * `remove_long_words` remove words longer than 15 chars. 
 * `by_chunk` read files by chunks with size `chunk_size`. 
 
+### HuggingFace datasets
+
+```python
+import tnkeeh as tn 
+from datasets import load_dataset
+
+dataset = load_dataset('metrec')
+
+cleander = tn.Tnqeeh(remove_diacritics = True)
+cleaned_dataset = cleander.clean_hf_dataset(dataset, 'text')
+
+```
+
 ### Data Splitting 
 Splits raw data into training and testing using the `split_ratio`
 ```python
