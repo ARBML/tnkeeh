@@ -1,4 +1,5 @@
 import tnkeeh
+import pandas as pd 
 
 text = tnkeeh._remove_special_chars('كيف حالكم ، يا أشقاء')
 expected = 'كيف حالكم   يا أشقاء'
@@ -59,3 +60,7 @@ if text == expected:
     print('success')
 else:
     print('failed')
+
+df = pd.DataFrame({'col1':['السلام عليكم', 'كيًف حالكم']})
+
+print(tnkeeh.clean_data_frame(df, 'col1', remove_diacritics = True))
