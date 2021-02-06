@@ -166,6 +166,21 @@ def _clean_list(list, **kwargs):
         cleaned_list.append(text)
     return cleaned_list
 
+def _clean_dict(example, field, **kwargs):
+    example[field] = _clean_text(example[field], **kwargs)
+    return example
+
+def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = False, 
+        remove_english = False, normalize = False, remove_diacritics = False,
+        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        remove_links = False, remove_twitter_meta = False, remove_long_words = False,
+        remove_repeated_chars = False):
+    args = locals()
+    args.pop('dataset')
+    args.pop('field')
+    updated_dataset = dataset.map(lambda example:_clean_dict(example, field, **args))
+    return updated_dataset
+
 def clean_data_frame(df, column_name, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
         execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
