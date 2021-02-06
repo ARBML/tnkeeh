@@ -64,3 +64,6 @@ else:
 df = pd.DataFrame({'col1':['السلام عليكم', 'كيًف حالكم']})
 
 print(tnkeeh.clean_data_frame(df, 'col1', remove_diacritics = True))
+
+
+
