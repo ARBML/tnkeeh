@@ -9,7 +9,7 @@ if text == expected:
 else:
     print('failed')
 
-text = tnkeeh._remove_special_chars('3 + 3 and 3 - 3', execluded_chars = ['+' , '-', '*'])
+text = tnkeeh._remove_special_chars('3 + 3 and 3 - 3', excluded_chars = ['+' , '-', '*'])
 expected = '3 + 3 and 3 - 3'
 
 if text == expected:
@@ -17,7 +17,7 @@ if text == expected:
 else:
     print('failed')
 
-text = tnkeeh._remove_special_chars('9/8/1770', execluded_chars = ['/'])
+text = tnkeeh._remove_special_chars('9/8/1770', excluded_chars = ['/'])
 expected = '9/8/1770'
 
 if text == expected:
