@@ -68,10 +68,10 @@ def _remove_extra_spaces(text):
     return text
 
 
-def _remove_special_chars(text, execluded_chars=[]):
+def _remove_special_chars(text, excluded_chars=[]):
     regex_special_chars = "\\^+*[]-"
     ignored_chars = ""
-    for char in execluded_chars:
+    for char in excluded_chars:
         if char in regex_special_chars:
             ignored_chars += f"\\" + char
         else:
@@ -144,7 +144,7 @@ def _clean_text(text, **kwargs):
     if kwargs['remove_diacritics']:
         text = _remove_diacritics(text)
     if kwargs['remove_special_chars']:
-        text = _remove_special_chars(text, kwargs['execluded_chars'])
+        text = _remove_special_chars(text, kwargs['excluded_chars'])
     if kwargs['remove_tatweel']:
         text = re.sub('ـ', '', text)
     if kwargs['remove_links']:
@@ -172,7 +172,7 @@ def _clean_dict(example, field, **kwargs):
 
 def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        excluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
         remove_repeated_chars = False):
     args = locals()
@@ -183,7 +183,7 @@ def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = Fal
 
 def clean_data_frame(df, column_name, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,
-        execluded_chars = [], remove_tatweel = False, remove_html_elements = False,
+        excluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
         remove_repeated_chars = False):
     df[column_name] = list(_clean_list(df[column_name], **locals()))
@@ -228,7 +228,7 @@ def clean_data(
     remove_english=False,
     normalize=False,
     remove_diacritics=False,
-    execluded_chars=[],
+    excluded_chars=[],
     remove_tatweel=False,
     remove_html_elements=False,
     remove_links=False,
@@ -283,7 +283,7 @@ def clean_data(
                 text = _remove_diacritics(text)
             if remove_special_chars:
                 print("Remove special chars")
-                text = _remove_special_chars(text, execluded_chars)
+                text = _remove_special_chars(text, excluded_chars)
             if remove_tatweel:
                 print("Remove tatweel")
                 text = re.sub("ـ", "", text)
