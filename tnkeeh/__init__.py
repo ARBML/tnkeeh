@@ -11,7 +11,7 @@ from tnkeeh.tnkeeh import (
     split_classification_data,
 )
 
-class Tnqeeh:
+class Tnkeeh:
     def __init__(
         self, segment = False, remove_special_chars = False, 
         remove_english = False, normalize = False, remove_diacritics = False,

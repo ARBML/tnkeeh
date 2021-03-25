@@ -8,7 +8,7 @@ with open('README.md') as readme_file:
     readme = readme_file.read()
 
 setup(name='tnkeeh',
-      version='0.0.5',
+      version='0.0.6',
       url='',
       discription="Arabic Preprocessing Library",
       long_description=readme,
