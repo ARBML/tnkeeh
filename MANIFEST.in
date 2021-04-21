@@ -1,1 +1,1 @@
-include norm_dict.pl
+include dictionaries/norm_dict.pl
