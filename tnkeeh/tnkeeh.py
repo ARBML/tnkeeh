@@ -122,7 +122,8 @@ def _remove_twitter_meta(text):
 def _remove_long_words(text, threshold=15):
     return (" ").join(word for word in text.split(" ") if len(word) < threshold)
 
-def _translate(text, model, tokenizer):
+def _translate(text):
+    global model, tokenizer
     translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
     return tokenizer.decode(translated[0], skip_special_tokens=True)
 
@@ -160,7 +161,7 @@ def _clean_text(text, **kwargs):
     if kwargs['remove_long_words']:
         text = _remove_long_words(text)
     if kwargs['translate'] != None:
-        text = _translate(text, model, tokenizer)
+        text = _translate(text)
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
