@@ -127,6 +127,7 @@ def _translate(text, model, tokenizer):
     return tokenizer.decode(translated[0], skip_special_tokens=True)
 
 def _clean_text(text, **kwargs):
+    global model, tokenizer
     if kwargs['segment']:
         # suppress farasa stdout
         # WARNING: this is LINUX ONLY command!
@@ -159,9 +160,6 @@ def _clean_text(text, **kwargs):
     if kwargs['remove_long_words']:
         text = _remove_long_words(text)
     if kwargs['translate'] != None:
-        model_name = f'Helsinki-NLP/opus-mt-ar-{kwargs["translate"]}'
-        tokenizer = MarianTokenizer.from_pretrained(model_name)
-        model = MarianMTModel.from_pretrained(model_name)
         text = _translate(text, model, tokenizer)
 
     text = _add_spaces_to_all_special_chars(text)
@@ -188,6 +186,12 @@ def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = Fal
     args = locals()
     args.pop('dataset')
     args.pop('field')
+    if translate!= None:
+        global model, tokenizer
+        model_name = f'Helsinki-NLP/opus-mt-ar-{translate}'
+        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        model = MarianMTModel.from_pretrained(model_name)
+
     updated_dataset = dataset.map(lambda example:_clean_dict(example, field, **args))
     return updated_dataset
 
