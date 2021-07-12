@@ -7,6 +7,7 @@ import pandas
 import warnings
 from pathlib import Path
 from farasa.segmenter import FarasaSegmenter
+from transformers import MarianMTModel, MarianTokenizer
 
 # remove diacritics
 def _remove_diacritics(text):
@@ -121,6 +122,10 @@ def _remove_twitter_meta(text):
 def _remove_long_words(text, threshold=15):
     return (" ").join(word for word in text.split(" ") if len(word) < threshold)
 
+def _translate(text, model, tokenizer):
+    translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
+    return tokenizer.decode(translated[0], skip_special_tokens=True)
+
 def _clean_text(text, **kwargs):
     if kwargs['segment']:
         # suppress farasa stdout
@@ -153,6 +158,11 @@ def _clean_text(text, **kwargs):
         text = _remove_twitter_meta(text)
     if kwargs['remove_long_words']:
         text = _remove_long_words(text)
+    if kwargs['translate'] != None:
+        model_name = f'Helsinki-NLP/opus-mt-ar-{kwargs["translate"]}'
+        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        model = MarianMTModel.from_pretrained(model_name)
+        text = _translate(text, model, tokenizer)
 
     text = _add_spaces_to_all_special_chars(text)
     text = _remove_extra_spaces(text)
@@ -174,7 +184,7 @@ def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = Fal
         remove_english = False, normalize = False, remove_diacritics = False,
         excluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False):
+        remove_repeated_chars = False, translate = None):
     args = locals()
     args.pop('dataset')
     args.pop('field')
@@ -185,7 +195,7 @@ def clean_data_frame(df, column_name, segment = False, remove_special_chars = Fa
         remove_english = False, normalize = False, remove_diacritics = False,
         excluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False):
+        remove_repeated_chars = False, translate = None):
     df[column_name] = list(_clean_list(df[column_name], **locals()))
     return df 
 

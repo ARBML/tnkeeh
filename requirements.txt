@@ -1,2 +1,3 @@
 farasapy
 datasets
+transformers[sentencepiece]

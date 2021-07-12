@@ -17,7 +17,7 @@ class Tnkeeh:
         remove_english = False, normalize = False, remove_diacritics = False,
         excluded_chars = [], remove_tatweel = False, remove_html_elements = False,
         remove_links = False, remove_twitter_meta = False, remove_long_words = False,
-        remove_repeated_chars = False
+        remove_repeated_chars = False, translate = None,
     ):
         self.args = locals()
         self.args.pop('self')
