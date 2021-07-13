@@ -124,7 +124,7 @@ def _remove_long_words(text, threshold=15):
 
 def _translate(text):
     global model, tokenizer
-    translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))
+    translated = model.generate(**tokenizer(text, return_tensors="pt", padding='max_length', truncation=True))
     return tokenizer.decode(translated[0], skip_special_tokens=True)
 
 def _clean_text(text, **kwargs):
@@ -190,7 +190,7 @@ def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = Fal
     if translate!= None:
         global model, tokenizer
         model_name = f'Helsinki-NLP/opus-mt-ar-{translate}'
-        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        tokenizer = MarianTokenizer.from_pretrained(model_name, model_max_length = 512)
         model = MarianMTModel.from_pretrained(model_name)
 
     updated_dataset = dataset.map(lambda example:_clean_dict(example, field, **args))
