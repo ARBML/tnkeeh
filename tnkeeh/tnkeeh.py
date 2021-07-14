@@ -127,7 +127,7 @@ def _translate(text):
     translated = model.generate(**tokenizer(text, return_tensors="pt", padding='max_length', truncation=True))
     return tokenizer.decode(translated[0], skip_special_tokens=True)
 
-def clean_text(text, **kwargs):
+def _clean_text(text, **kwargs):
     if kwargs['segment']:
         # suppress farasa stdout
         # WARNING: this is LINUX ONLY command!
@@ -170,12 +170,12 @@ def _clean_list(list, **kwargs):
     cleaned_list = []
 
     for text in list:
-        text = clean_text(text, **kwargs)
+        text = _clean_text(text, **kwargs)
         cleaned_list.append(text)
     return cleaned_list
 
 def _clean_dict(example, field, **kwargs):
-    example[field] = clean_text(example[field], **kwargs)
+    example[field] = _clean_text(example[field], **kwargs)
     return example
 
 def clean_hf_dataset(dataset, field, segment = False, remove_special_chars = False, 

@@ -2,7 +2,7 @@ import tnkeeh.tnkeeh as tn
 
 from tnkeeh.tnkeeh import (
     clean_data,
-    clean_text,
+    _clean_text,
     clean_data_frame,
     read_data,
     split_raw_data,
@@ -29,7 +29,7 @@ class Tnkeeh:
         return tn.clean_data(file_path,save_path, **self.args)
 
     def clean_raw_text(self, text):
-        return tn.clean_text(text, **self.args),
+        return tn._clean_text(text, **self.args),
         
     def clean_data_frame(self, df, column_name):
         return tn.clean_data_frame(df, column_name, **self.args)
