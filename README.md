@@ -43,8 +43,8 @@ from datasets import load_dataset
 
 dataset = load_dataset('metrec')
 
-cleander = tn.Tnkeeh(remove_diacritics = True)
-cleaned_dataset = cleander.clean_hf_dataset(dataset, 'text')
+cleaner = tn.Tnkeeh(remove_diacritics = True)
+cleaned_dataset = cleaner.clean_hf_dataset(dataset, 'text')
 
 ```
 
